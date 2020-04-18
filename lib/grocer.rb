@@ -10,18 +10,20 @@ def find_item_by_name_in_collection(name, collection)
 end
 
 def consolidate_cart(cart)
-  consolidated_cart = []
-  index = 0
-  added_items = []  #this array will keep track of if an item is already conslidated to avoid duplicates in the consolidated cart
+  i = 0
+    result = []
 
-  while index < cart.length
-    current_item = cart[index]
-    if !added_items.index(current_item[:item])              #will result in true when item is not included in added_items
-      added_items << current_item[:item]                    #signifies we have processed the first instance of a cart item
-      current_item[:count] = count_num_in_cart(current_item[:item], cart) #add a key to existing item hash of total num in cart
-      consolidated_cart << current_item                     #finally, add the consolidated item to the new cart
+    while i < cart.count do
+      item_name = cart[i][:item]
+      sought_item = find_item_by_name_in_collection(item_name, result)
+      if sought_item
+        sought_item[:count] += 1
+      else
+        cart[i][:count] = 1
+        result << cart[i]
+      end
+      i += 1
     end
-    index += 1
-  end
-  consolidated_cart
+
+    result
 end
